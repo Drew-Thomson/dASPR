@@ -41,6 +41,26 @@ char Three2One(string aa3)
   else if(aa3=="TRP")return 'W';
   else if(aa3=="TYR")return 'Y';
 
+  else if(aa3=="DAL")return 'a';
+  else if(aa3=="DCY")return 'c';
+  else if(aa3=="DAS")return 'd';
+  else if(aa3=="DGL")return 'e';
+  else if(aa3=="DPN")return 'f';
+  else if(aa3=="DHI")return 'h';
+  else if(aa3=="DIL")return 'i';
+  else if(aa3=="DLY")return 'k';
+  else if(aa3=="DLE")return 'l';
+  else if(aa3=="MED")return 'm';
+  else if(aa3=="DSG")return 'n';
+  else if(aa3=="DPR")return 'p';
+  else if(aa3=="DGN")return 'q';
+  else if(aa3=="DAR")return 'r';
+  else if(aa3=="DSN")return 's';
+  else if(aa3=="DTH")return 't';
+  else if(aa3=="DVA")return 'v';
+  else if(aa3=="DTR")return 'w';
+  else if(aa3=="DTY")return 'y';
+
   else if(aa3=="AYA")return 'A';
   else if(aa3=="CAS")return 'C';
   else if(aa3=="CAY")return 'C';
@@ -152,6 +172,25 @@ void One2Three(char aa1, string &aa3)
   case'V':aa3="VAL";break;
   case'W':aa3="TRP";break;
   case'Y':aa3="TYR";break;
+  case'a':aa3="DAL";break;
+  case'c':aa3="DCY";break;
+  case'd':aa3="DAS";break;
+  case'e':aa3="DGL";break;
+  case'f':aa3="DPN";break;
+  case'h':aa3="DHI";break;
+  case'i':aa3="DIL";break;
+  case'k':aa3="DLY";break;
+  case'l':aa3="DLE";break;
+  case'm':aa3="MED";break;
+  case'n':aa3="DSG";break;
+  case'p':aa3="DPR";break;
+  case'q':aa3="DGN";break;
+  case'r':aa3="DAR";break;
+  case's':aa3="DSN";break;
+  case't':aa3="DTH";break;
+  case'v':aa3="DVA";break;
+  case'w':aa3="DTR";break;
+  case'y':aa3="DTY";break;  
   default:break;
   }
 }
