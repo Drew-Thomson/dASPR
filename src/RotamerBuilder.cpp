@@ -40,6 +40,24 @@ extern string ROTLIB2010;
 #define WGT_VAL  2.0
 #define WGT_TRP  3.5
 #define WGT_TYR  1.5
+#define WGT_DCY  5.5
+#define WGT_DAS  2.0
+#define WGT_DGL  1.0
+#define WGT_DPN  1.5
+#define WGT_DHI  3.0
+#define WGT_DIL  1.0
+#define WGT_DLY  2.0
+#define WGT_DLE  2.0
+#define WGT_MED  1.5
+#define WGT_DSG  2.0
+#define WGT_DPR  1.5
+#define WGT_DGN  2.5
+#define WGT_DAR  1.5
+#define WGT_DSN  1.5
+#define WGT_DTH  2.0
+#define WGT_DVA  2.0
+#define WGT_DTR  3.5
+#define WGT_DTY  1.5
 #define ROT_PROB_CUT_MIN  0.01
 #define ROT_PROB_CUT_ACC  0.97
 
@@ -82,6 +100,7 @@ void RotamerBuilder::LoadSeq(string &seqfile)
     cout<<"error! the sequence length from file is different from the sequence length from structure"<<endl;
     exit(0);
   }
+  //probably need to remove this bit? converts lower to upper and we don't want that here
   for(i=0;i<nres;i++){
     if(seq[i]>='a'){
       seq[i]-=32;
@@ -111,7 +130,24 @@ void RotamerBuilder::LoadParameter()
   wRotlib['V']=WGT_VAL;
   wRotlib['W']=WGT_TRP;
   wRotlib['Y']=WGT_TYR;
-
+  wRotlib['c']=WGT_DCY;
+  wRotlib['d']=WGT_DAS;
+  wRotlib['e']=WGT_DGL;
+  wRotlib['f']=WGT_DPN;
+  wRotlib['h']=WGT_DHI;
+  wRotlib['i']=WGT_DIL;
+  wRotlib['k']=WGT_DLY;
+  wRotlib['l']=WGT_DLE;
+  wRotlib['m']=WGT_MED;
+  wRotlib['n']=WGT_DAS;
+  wRotlib['p']=WGT_DPR;
+  wRotlib['q']=WGT_DGN;
+  wRotlib['r']=WGT_DAR;
+  wRotlib['s']=WGT_DSN;
+  wRotlib['t']=WGT_DTH;
+  wRotlib['v']=WGT_DVA;
+  wRotlib['w']=WGT_DTR;
+  wRotlib['y']=WGT_DTY;
 }
 
 void RotamerBuilder::LoadBBdepRotlib2010()
@@ -122,10 +158,18 @@ void RotamerBuilder::LoadBBdepRotlib2010()
   Chin['R']=4;Chin['N']=2;Chin['D']=2;Chin['C']=1;Chin['Q']=3;Chin['E']=3;Chin['H']=2;Chin['I']=2;
   Chin['L']=2;Chin['K']=4;Chin['M']=3;Chin['F']=2;Chin['P']=2;Chin['S']=1;Chin['T']=1;Chin['W']=2;
   Chin['Y']=2;Chin['V']=1;
+  Chin['r']=4;Chin['n']=2;Chin['d']=2;Chin['c']=1;Chin['q']=3;Chin['e']=3;Chin['h']=2;Chin['i']=2;
+  Chin['l']=2;Chin['k']=4;Chin['m']=3;Chin['f']=2;Chin['p']=2;Chin['s']=1;Chin['t']=1;Chin['w']=2;
+  Chin['y']=2;Chin['v']=1;
 
   Rotn['R']=75;Rotn['N']=36;Rotn['D']=18;Rotn['C']=3;Rotn['Q']=108;Rotn['E']=54;Rotn['H']=36;
   Rotn['I']=9;Rotn['L']=9;Rotn['K']=73;Rotn['M']=27;Rotn['F']=18;Rotn['P']=2;Rotn['S']=3;
   Rotn['T']=3;Rotn['W']=36;Rotn['Y']=18;Rotn['V']=3;
+  Rotn['r']=75;Rotn['n']=36;Rotn['d']=18;Rotn['c']=3;Rotn['q']=108;Rotn['e']=54;Rotn['h']=36;
+  Rotn['i']=9;Rotn['l']=9;Rotn['k']=73;Rotn['m']=27;Rotn['f']=18;Rotn['p']=2;Rotn['s']=3;
+  Rotn['t']=3;Rotn['w']=36;Rotn['y']=18;Rotn['v']=3;
+
+  //need to increment these in same manner for d amino acids to follow in same order
   Rotl['R']=0;Rotl['N']=75;Rotl['D']=111;Rotl['C']=129;Rotl['Q']=132;Rotl['E']=240;Rotl['H']=294;
   Rotl['I']=330;Rotl['L']=339;Rotl['K']=348;Rotl['M']=421;Rotl['F']=448;Rotl['P']=466;Rotl['S']=468;
   Rotl['T']=471;Rotl['W']=474;Rotl['Y']=510;Rotl['V']=528;
