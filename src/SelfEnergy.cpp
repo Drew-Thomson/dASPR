@@ -32,12 +32,13 @@ void SelfEnergy::AssignConMap()
   map<char,float> res_rad;
   res_rad['G']=2.4;
   res_rad['A']=res_rad['C']=res_rad['D']=res_rad['I']=res_rad['L']=res_rad['N']=res_rad['P']=res_rad['S']=res_rad['T']=res_rad['V']=3.2;
-  res_rad['Q']=res_rad['E']=res_rad['H']=3.7;
-  res_rad['M']=res_rad['F']=4.3;
-  res_rad['K']=5.0;
-  res_rad['W']=5.3;
-  res_rad['Y']=5.7;
-  res_rad['R']=6.2;
+  res_rad['a']=res_rad['c']=res_rad['d']=res_rad['i']=res_rad['l']=res_rad['n']=res_rad['p']=res_rad['s']=res_rad['t']=res_rad['v']=3.2;
+  res_rad['Q']=res_rad['E']=res_rad['H']=res_rad['q']=res_rad['e']=res_rad['h']=3.7;
+  res_rad['M']=res_rad['F']=res_rad['m']=res_rad['f']=4.3;
+  res_rad['K']=res_rad['k']=5.0;
+  res_rad['W']=res_rad['w']=5.3;
+  res_rad['Y']=res_rad['y']=5.7;
+  res_rad['R']=res_rad['r']=6.2;
 
   IV1 ivtmp;
   conMap.assign(nres,ivtmp);
@@ -112,6 +113,27 @@ void SelfEnergy::SetVdwPar()
   inx[5]=6;inx[6]=6;inx[7]=6;inx[8]=6;inx[9]=6;inx[10]=6;vAtomIdx['F']=inx;//11 atoms
   inx.push_back(16);vAtomIdx['Y']=inx;//12 atoms
   inx[8]=10;inx[11]=6;inx.push_back(6);inx.push_back(6);vAtomIdx['W']=inx;//14 atoms
+  //hopefully just duplincating this and swapping to lowercase still works
+  inx.push_back(5);vAtomIdx['a']=inx;//5 atoms
+  inx[4]=8;inx.push_back(17); vAtomIdx['c']=inx;//6 atoms
+  inx[4]=4;inx[5]=16; vAtomIdx['s']=inx;//6 atoms
+  inx[5]=4;inx.push_back(4);inx[0]=12; vAtomIdx['p']=inx;//7 atoms
+  inx[0]=9;inx[4]=3;inx[5]=16;inx[6]=5; vAtomIdx['t']=inx;//7 atoms
+  inx[5]=5; vAtomIdx['v']=inx;//7 atoms
+  inx[4]=4;inx[5]=4;inx[6]=18;inx.push_back(5);vAtomIdx['m']=inx;//8 atoms
+  inx[5]=7;inx[6]=14;inx[7]=10;  vAtomIdx['n']=inx;//8 atoms
+  inx[6]=15;inx[7]=15; vAtomIdx['d']=inx;//8 atooms
+  inx[5]=3;inx[6]=5;inx[7]=5;  vAtomIdx['l']=inx;//8 atoms
+  inx[4]=3;inx[5]=4; vAtomIdx['i']=inx;//8 atoms
+  inx[4]=4;inx[6]=7;inx[7]=14;inx.push_back(10);vAtomIdx['q']=inx;//9 atoms
+  inx[7]=15;inx[8]=15; vAtomIdx['e']=inx;//9 atoms
+  inx[6]=4;inx[7]=4;inx[8]=10; vAtomIdx['k']=inx;//9 atoms
+  //for His, index 6 stands for ND1, index 9 stands for NE2
+  inx[5]=6;inx[6]=10;inx[7]=6;inx[8]=6;inx.push_back(11);vAtomIdx['h']=inx; //10 atoms
+  inx[5]=4;inx[6]=4;inx[7]=10;inx[8]=7;inx[9]=10;inx.push_back(10);vAtomIdx['r']=inx;//11 atoms
+  inx[5]=6;inx[6]=6;inx[7]=6;inx[8]=6;inx[9]=6;inx[10]=6;vAtomIdx['f']=inx;//11 atoms
+  inx.push_back(16);vAtomIdx['y']=inx;//12 atoms
+  inx[8]=10;inx[11]=6;inx.push_back(6);inx.push_back(6);vAtomIdx['w']=inx;//14 atoms
   for(int i=0;i<nres;i++){
     FV1 radtmp,depthtmp;
     IV1 ati_tmp=vAtomIdx[seq[i]];
@@ -230,46 +252,46 @@ float SelfEnergy::RotamerPreferenceEnergy(int site,int rot)
 float SelfEnergy::EnergyPolarSidechainAndBackbone(int site1,int rot1,int site2){
   float energy=0.;
   if(site1-site2<=1 && site1-site2>=-1) return energy;
-  if(seq[site1]=='D'){
+  if(seq[site1]=='D'||seq[site1]=='d'){
     energy = HbondEnergyAtomAndAtom(stru[site2].xyz[1],stru[site2].xyz[0],sc[site1][rot1][1],sc[site1][rot1][0],120.,120.)+
       HbondEnergyAtomAndAtom(stru[site2].xyz[1],stru[site2].xyz[0],sc[site1][rot1][2],sc[site1][rot1][0],120.,120.);
   }
-  else if(seq[site1]=='E'){
+  else if(seq[site1]=='E'||seq[site1]=='e'){
     energy = HbondEnergyAtomAndAtom(stru[site2].xyz[1],stru[site2].xyz[0],sc[site1][rot1][2],sc[site1][rot1][1],120.,120.)+
       HbondEnergyAtomAndAtom(stru[site2].xyz[1],stru[site2].xyz[0],sc[site1][rot1][3],sc[site1][rot1][1],120.,120.);
   }
-  else if(seq[site1]=='K'){
+  else if(seq[site1]=='K'||seq[site1]=='k'){
     energy = HbondEnergyAtomAndAtom(sc[site1][rot1][2],sc[site1][rot1][3],stru[site2].xyz[3],stru[site2].xyz[2],109.5,120.);
   }
-  else if(seq[site1]=='R'){
+  else if(seq[site1]=='R'||seq[site1]=='r'){
     energy = HbondEnergyAtomAndAtom(sc[site1][rot1][3],sc[site1][rot1][4],stru[site2].xyz[3],stru[site2].xyz[2],120.,120.)+
       HbondEnergyAtomAndAtom(sc[site1][rot1][3],sc[site1][rot1][5],stru[site2].xyz[3],stru[site2].xyz[2],120.,120.)+
       HbondEnergyAtomAndAtom(sc[site1][rot1][1],sc[site1][rot1][2],stru[site2].xyz[3],stru[site2].xyz[2],120.,120.);
   }
-  else if(seq[site1]=='W'){
+  else if(seq[site1]=='W'||seq[site1]=='w'){
     energy = HbondEnergyAtomAndAtom(sc[site1][rot1][1],sc[site1][rot1][3],stru[site2].xyz[3],stru[site2].xyz[2],120.,120.);
   }
-  else if(seq[site1]=='H'){
+  else if(seq[site1]=='H'||seq[site1]=='h'){
     energy = HbondEnergyAtomAndAtom(sc[site1][rot1][0],sc[site1][rot1][1],stru[site2].xyz[3],stru[site2].xyz[2],120.,120.)+
       HbondEnergyAtomAndAtom(stru[site2].xyz[1],stru[site2].xyz[0],sc[site1][rot1][4],sc[site1][rot1][2],120.,120.);
   }
-  else if(seq[site1]=='N'){
+  else if(seq[site1]=='N'||seq[site1]=='n'){
     energy = HbondEnergyAtomAndAtom(sc[site1][rot1][0],sc[site1][rot1][2],stru[site2].xyz[3],stru[site2].xyz[2],120.,120.)+
       HbondEnergyAtomAndAtom(stru[site2].xyz[1],stru[site2].xyz[0],sc[site1][rot1][1],sc[site1][rot1][0],120.,120.);
   }
-  else if(seq[site1]=='Q'){
+  else if(seq[site1]=='Q'||seq[site1]=='q'){
     energy = HbondEnergyAtomAndAtom(sc[site1][rot1][1],sc[site1][rot1][3],stru[site2].xyz[3],stru[site2].xyz[2],120.,120.)+
       HbondEnergyAtomAndAtom(stru[site2].xyz[1],stru[site2].xyz[0],sc[site1][rot1][2],sc[site1][rot1][1],120.,120.);
   }
-  else if(seq[site1]=='S'){
+  else if(seq[site1]=='S'||seq[site1]=='s'){
     energy = HbondEnergyAtomAndAtom(stru[site1].xyz[4],sc[site1][rot1][0],stru[site2].xyz[3],stru[site2].xyz[2],109.5,120.)+
       HbondEnergyAtomAndAtom(stru[site2].xyz[1],stru[site2].xyz[0],sc[site1][rot1][0],stru[site1].xyz[4],120.,109.5);
   }
-  else if(seq[site1]=='T'){
+  else if(seq[site1]=='T'||seq[site1]=='t'){
     energy = HbondEnergyAtomAndAtom(stru[site1].xyz[4],sc[site1][rot1][0],stru[site2].xyz[3],stru[site2].xyz[2],109.5,120.)+
       HbondEnergyAtomAndAtom(stru[site2].xyz[1],stru[site2].xyz[0],sc[site1][rot1][0],stru[site1].xyz[4],120.,109.5);
   }
-  else if(seq[site1]=='Y'){
+  else if(seq[site1]=='Y'||seq[site1]=='y'){
     energy = HbondEnergyAtomAndAtom(sc[site1][rot1][5],sc[site1][rot1][6],stru[site2].xyz[3],stru[site2].xyz[2],120.,120.)+
       HbondEnergyAtomAndAtom(stru[site2].xyz[1],stru[site2].xyz[0],sc[site1][rot1][6],sc[site1][rot1][5],120.,120.);
   }
@@ -279,17 +301,17 @@ float SelfEnergy::EnergyPolarSidechainAndBackbone(int site1,int rot1,int site2){
 
 float SelfEnergy::EnergyPolarSidechainAndSidechain(int site1,int rot1,int site2,int rot2){
   float energy=0.;
-  if(seq[site1]=='C'){
-    if(seq[site2]=='C'){
+  if(seq[site1]=='C'||seq[site1]=='c'){
+    if(seq[site2]=='C'||seq[site2]=='c'){
       energy = SSbondEnergyAtomAndAtom(stru[site1].xyz[1],stru[site1].xyz[4],sc[site1][rot1][0],sc[site2][rot2][0],stru[site2].xyz[4],stru[site2].xyz[1]);
     }
   }
-  else if(seq[site1]=='D'){
-    if(seq[site2]=='K'){
+  else if(seq[site1]=='D'||seq[site1]=='d'){
+    if(seq[site2]=='K'||seq[site2]=='k'){
       energy = HbondEnergyAtomAndAtom(sc[site2][rot2][2],sc[site2][rot2][3],sc[site1][rot1][1],sc[site1][rot1][0],120.,120.)+
         HbondEnergyAtomAndAtom(sc[site2][rot2][2],sc[site2][rot2][3],sc[site1][rot1][2],sc[site1][rot1][0],120.,120.);
     }
-    else if(seq[site2]=='R'){
+    else if(seq[site2]=='R'||seq[site2]=='r'){
       energy = HbondEnergyAtomAndAtom(sc[site2][rot2][3],sc[site2][rot2][4],sc[site1][rot1][1],sc[site1][rot1][0],120.,120.)+
         HbondEnergyAtomAndAtom(sc[site2][rot2][3],sc[site2][rot2][4],sc[site1][rot1][2],sc[site1][rot1][0],120.,120.)+
         HbondEnergyAtomAndAtom(sc[site2][rot2][3],sc[site2][rot2][5],sc[site1][rot1][1],sc[site1][rot1][0],120.,120.)+
@@ -297,41 +319,41 @@ float SelfEnergy::EnergyPolarSidechainAndSidechain(int site1,int rot1,int site2,
         HbondEnergyAtomAndAtom(sc[site2][rot2][1],sc[site2][rot2][2],sc[site1][rot1][1],sc[site1][rot1][0],120.,120.)+
         HbondEnergyAtomAndAtom(sc[site2][rot2][1],sc[site2][rot2][2],sc[site1][rot1][2],sc[site1][rot1][0],120.,120.);
     }
-    else if(seq[site2]=='W'){
+    else if(seq[site2]=='W'||seq[site2]=='w'){
       energy = HbondEnergyAtomAndAtom(sc[site2][rot2][1],sc[site2][rot2][3],sc[site1][rot1][1],sc[site1][rot1][0],120.,120.)+
         HbondEnergyAtomAndAtom(sc[site2][rot2][1],sc[site2][rot2][3],sc[site1][rot1][2],sc[site1][rot1][0],120.,120.);
     }
-    else if(seq[site2]=='H'){
+    else if(seq[site2]=='H'||seq[site2]=='h'){
       energy = HbondEnergyAtomAndAtom(sc[site2][rot2][0],sc[site2][rot2][1],sc[site1][rot1][1],sc[site1][rot1][0],120.,120.)+
         HbondEnergyAtomAndAtom(sc[site2][rot2][0],sc[site2][rot2][1],sc[site1][rot1][2],sc[site1][rot1][0],120.,120.);
     }
-    else if(seq[site2]=='N'){
+    else if(seq[site2]=='N'||seq[site2]=='n'){
       energy = HbondEnergyAtomAndAtom(sc[site2][rot2][0],sc[site2][rot2][2],sc[site1][rot1][1],sc[site1][rot1][0],120.,120.)+
         HbondEnergyAtomAndAtom(sc[site2][rot2][0],sc[site2][rot2][2],sc[site1][rot1][2],sc[site1][rot1][0],120.,120.);
     }
-    else if(seq[site2]=='Q'){
+    else if(seq[site2]=='Q'||seq[site2]=='q'){
       energy = HbondEnergyAtomAndAtom(sc[site2][rot2][1],sc[site2][rot2][3],sc[site1][rot1][1],sc[site1][rot1][0],120.,120.)+
         HbondEnergyAtomAndAtom(sc[site2][rot2][1],sc[site2][rot2][3],sc[site1][rot1][2],sc[site1][rot1][0],120.,120.);
     }
-    else if(seq[site2]=='S'){
+    else if(seq[site2]=='S'||seq[site2]=='s'){
       energy = HbondEnergyAtomAndAtom(stru[site2].xyz[4],sc[site2][rot2][0],sc[site1][rot1][1],sc[site1][rot1][0],109.5,120.)+
         HbondEnergyAtomAndAtom(stru[site2].xyz[4],sc[site2][rot2][0],sc[site1][rot1][2],sc[site1][rot1][0],109.5,120.);
     }
-    else if(seq[site2]=='T'){
+    else if(seq[site2]=='T'||seq[site2]=='t'){
       energy = HbondEnergyAtomAndAtom(stru[site2].xyz[4],sc[site2][rot2][0],sc[site1][rot1][1],sc[site1][rot1][0],109.5,120.)+
         HbondEnergyAtomAndAtom(stru[site2].xyz[4],sc[site2][rot2][0],sc[site1][rot1][2],sc[site1][rot1][0],109.5,120.);
     }
-    else if(seq[site2]=='Y'){
+    else if(seq[site2]=='Y'||seq[site2]=='y'){
       energy = HbondEnergyAtomAndAtom(sc[site2][rot2][5],sc[site2][rot2][6],sc[site1][rot1][1],sc[site1][rot1][0],120.,120.)+
         HbondEnergyAtomAndAtom(sc[site2][rot2][5],sc[site2][rot2][6],sc[site1][rot1][2],sc[site1][rot1][0],120.,120.);
     }
   }
-  else if(seq[site1]=='E'){
-    if(seq[site2]=='K'){
+  else if(seq[site1]=='E'||seq[site1]=='e'){
+    if(seq[site2]=='K'||seq[site2]=='k'){
       energy = HbondEnergyAtomAndAtom(sc[site2][rot2][2],sc[site2][rot2][3],sc[site1][rot1][2],sc[site1][rot1][1],109.5,120.)+
         HbondEnergyAtomAndAtom(sc[site2][rot2][2],sc[site2][rot2][3],sc[site1][rot1][3],sc[site1][rot1][1],109.5,120.);
     }
-    else if(seq[site2]=='R'){
+    else if(seq[site2]=='R'||seq[site2]=='r'){
       energy = HbondEnergyAtomAndAtom(sc[site2][rot2][3],sc[site2][rot2][4],sc[site1][rot1][2],sc[site1][rot1][1],120.,120.)+
         HbondEnergyAtomAndAtom(sc[site2][rot2][3],sc[site2][rot2][4],sc[site1][rot1][3],sc[site1][rot1][1],120.,120.)+
         HbondEnergyAtomAndAtom(sc[site2][rot2][3],sc[site2][rot2][5],sc[site1][rot1][2],sc[site1][rot1][1],120.,120.)+
@@ -339,65 +361,65 @@ float SelfEnergy::EnergyPolarSidechainAndSidechain(int site1,int rot1,int site2,
         HbondEnergyAtomAndAtom(sc[site2][rot2][1],sc[site2][rot2][2],sc[site1][rot1][2],sc[site1][rot1][1],120.,120.)+
         HbondEnergyAtomAndAtom(sc[site2][rot2][1],sc[site2][rot2][2],sc[site1][rot1][3],sc[site1][rot1][1],120.,120.);
     }
-    else if(seq[site2]=='W'){
+    else if(seq[site2]=='W'||seq[site2]=='w'){
       energy = HbondEnergyAtomAndAtom(sc[site2][rot2][1],sc[site2][rot2][3],sc[site1][rot1][2],sc[site1][rot1][1],120.,120.)+
         HbondEnergyAtomAndAtom(sc[site2][rot2][1],sc[site2][rot2][3],sc[site1][rot1][3],sc[site1][rot1][1],120.,120.);
     }
-    else if(seq[site2]=='H'){
+    else if(seq[site2]=='H'||seq[site2]=='h'){
       energy = HbondEnergyAtomAndAtom(sc[site2][rot2][0],sc[site2][rot2][1],sc[site1][rot1][2],sc[site1][rot1][1],120.,120.)+
         HbondEnergyAtomAndAtom(sc[site2][rot2][0],sc[site2][rot2][1],sc[site1][rot1][3],sc[site1][rot1][1],120.,120.);
     }
-    else if(seq[site2]=='N'){
+    else if(seq[site2]=='N'||seq[site2]=='n'){
       energy = HbondEnergyAtomAndAtom(sc[site2][rot2][0],sc[site2][rot2][2],sc[site1][rot1][2],sc[site1][rot1][1],120.,120.)+
         HbondEnergyAtomAndAtom(sc[site2][rot2][0],sc[site2][rot2][2],sc[site1][rot1][3],sc[site1][rot1][1],120.,120.);
     }
-    else if(seq[site2]=='Q'){
+    else if(seq[site2]=='Q'||seq[site2]=='q'){
       energy = HbondEnergyAtomAndAtom(sc[site2][rot2][1],sc[site2][rot2][3],sc[site1][rot1][2],sc[site1][rot1][1],120.,120.)+
         HbondEnergyAtomAndAtom(sc[site2][rot2][1],sc[site2][rot2][3],sc[site1][rot1][3],sc[site1][rot1][1],120.,120.);
     }
-    else if(seq[site2]=='S'){
+    else if(seq[site2]=='S'||seq[site2]=='s'){
       energy = HbondEnergyAtomAndAtom(stru[site2].xyz[4],sc[site2][rot2][0],sc[site1][rot1][2],sc[site1][rot1][1],109.5,120.)+
         HbondEnergyAtomAndAtom(stru[site2].xyz[4],sc[site2][rot2][0],sc[site1][rot1][3],sc[site1][rot1][1],109.5,120.);
     }
-    else if(seq[site2]=='T'){
+    else if(seq[site2]=='T'||seq[site2]=='t'){
       energy = HbondEnergyAtomAndAtom(stru[site2].xyz[4],sc[site2][rot2][0],sc[site1][rot1][2],sc[site1][rot1][1],109.5,120.)+
         HbondEnergyAtomAndAtom(stru[site2].xyz[4],sc[site2][rot2][0],sc[site1][rot1][3],sc[site1][rot1][1],109.5,120.);
     }
-    else if(seq[site2]=='Y'){
+    else if(seq[site2]=='Y'||seq[site2]=='y'){
       energy = HbondEnergyAtomAndAtom(sc[site2][rot2][5],sc[site2][rot2][6],sc[site1][rot1][2],sc[site1][rot1][1],120.,120.)+
         HbondEnergyAtomAndAtom(sc[site2][rot2][5],sc[site2][rot2][6],sc[site1][rot1][3],sc[site1][rot1][1],120.,120.);
     }
   }
-  else if(seq[site1]=='K'){
-    if(seq[site2]=='D'){
+  else if(seq[site1]=='K'||seq[site1]=='k'){
+    if(seq[site2]=='D'||seq[site2]=='d'){
       energy = HbondEnergyAtomAndAtom(sc[site1][rot1][2],sc[site1][rot1][3],sc[site2][rot2][1],sc[site2][rot2][0],109.5,120.)+
         HbondEnergyAtomAndAtom(sc[site1][rot1][2],sc[site1][rot1][3],sc[site2][rot2][2],sc[site2][rot2][0],109.5,120.);
     }
-    else if(seq[site2]=='E'){
+    else if(seq[site2]=='E'||seq[site2]=='e'){
       energy = HbondEnergyAtomAndAtom(sc[site1][rot1][2],sc[site1][rot1][3],sc[site2][rot2][2],sc[site2][rot2][1],109.5,120.)+
         HbondEnergyAtomAndAtom(sc[site1][rot1][2],sc[site1][rot1][3],sc[site2][rot2][3],sc[site2][rot2][1],109.5,120.);
     }
-    else if(seq[site2]=='H'){
+    else if(seq[site2]=='H'||seq[site2]=='h'){
       energy = HbondEnergyAtomAndAtom(sc[site1][rot1][2],sc[site1][rot1][3],sc[site2][rot2][4],sc[site2][rot2][2],109.5,120.);
     }
-    else if(seq[site2]=='N'){
+    else if(seq[site2]=='N'||seq[site2]=='n'){
       energy = HbondEnergyAtomAndAtom(sc[site1][rot1][2],sc[site1][rot1][3],sc[site2][rot2][1],sc[site2][rot2][0],109.5,120.);
     }
-    else if(seq[site2]=='Q'){
+    else if(seq[site2]=='Q'||seq[site2]=='q'){
       energy = HbondEnergyAtomAndAtom(sc[site1][rot1][2],sc[site1][rot1][3],sc[site2][rot2][2],sc[site2][rot2][1],109.5,120.);
     }
-    else if(seq[site2]=='S'){
+    else if(seq[site2]=='S'||seq[site2]=='s'){
       energy = HbondEnergyAtomAndAtom(sc[site1][rot1][2],sc[site1][rot1][3],sc[site2][rot2][0],stru[site2].xyz[4],109.5,109.5);
     }
-    else if(seq[site2]=='T'){
+    else if(seq[site2]=='T'||seq[site2]=='t'){
       energy = HbondEnergyAtomAndAtom(sc[site1][rot1][2],sc[site1][rot1][3],sc[site2][rot2][0],stru[site2].xyz[4],109.5,109.5);
     }
-    else if(seq[site2]=='Y'){
+    else if(seq[site2]=='Y'||seq[site2]=='y'){
       energy = HbondEnergyAtomAndAtom(sc[site1][rot1][2],sc[site1][rot1][3],sc[site2][rot2][6],sc[site2][rot2][5],109.5,120.);
     }
   }
-  else if(seq[site1]=='R'){
-    if(seq[site2]=='D'){
+  else if(seq[site1]=='R'||seq[site1]=='r'){
+    if(seq[site2]=='D'||seq[site2]=='d'){
       energy = HbondEnergyAtomAndAtom(sc[site1][rot1][3],sc[site1][rot1][4],sc[site2][rot2][1],sc[site2][rot2][0],120.,120.)+
         HbondEnergyAtomAndAtom(sc[site1][rot1][3],sc[site1][rot1][4],sc[site2][rot2][2],sc[site2][rot2][0],120.,120.)+
         HbondEnergyAtomAndAtom(sc[site1][rot1][3],sc[site1][rot1][5],sc[site2][rot2][1],sc[site2][rot2][0],120.,120.)+
@@ -405,7 +427,7 @@ float SelfEnergy::EnergyPolarSidechainAndSidechain(int site1,int rot1,int site2,
         HbondEnergyAtomAndAtom(sc[site1][rot1][1],sc[site1][rot1][2],sc[site2][rot2][1],sc[site2][rot2][0],120.,120.)+
         HbondEnergyAtomAndAtom(sc[site1][rot1][1],sc[site1][rot1][2],sc[site2][rot2][2],sc[site2][rot2][0],120.,120.);
     }
-    else if(seq[site2]=='E'){
+    else if(seq[site2]=='E'||seq[site2]=='e'){
       energy = HbondEnergyAtomAndAtom(sc[site1][rot1][3],sc[site1][rot1][4],sc[site2][rot2][2],sc[site2][rot2][1],120.,120.)+
         HbondEnergyAtomAndAtom(sc[site1][rot1][3],sc[site1][rot1][4],sc[site2][rot2][3],sc[site2][rot2][1],120.,120.)+
         HbondEnergyAtomAndAtom(sc[site1][rot1][3],sc[site1][rot1][5],sc[site2][rot2][2],sc[site2][rot2][1],120.,120.)+
@@ -413,324 +435,324 @@ float SelfEnergy::EnergyPolarSidechainAndSidechain(int site1,int rot1,int site2,
         HbondEnergyAtomAndAtom(sc[site1][rot1][1],sc[site1][rot1][2],sc[site2][rot2][2],sc[site2][rot2][1],120.,120.)+
         HbondEnergyAtomAndAtom(sc[site1][rot1][1],sc[site1][rot1][2],sc[site2][rot2][3],sc[site2][rot2][1],120.,120.);
     }
-    else if(seq[site2]=='H'){
+    else if(seq[site2]=='H'||seq[site2]=='h'){
       energy = HbondEnergyAtomAndAtom(sc[site1][rot1][3],sc[site1][rot1][4],sc[site2][rot2][4],sc[site2][rot2][2],120.,120.)+
         HbondEnergyAtomAndAtom(sc[site1][rot1][3],sc[site1][rot1][5],sc[site2][rot2][4],sc[site2][rot2][2],120.,120.)+
         HbondEnergyAtomAndAtom(sc[site1][rot1][1],sc[site1][rot1][2],sc[site2][rot2][4],sc[site2][rot2][2],120.,120.);
     }
-    else if(seq[site2]=='N'){
+    else if(seq[site2]=='N'||seq[site2]=='n'){
       energy = HbondEnergyAtomAndAtom(sc[site1][rot1][3],sc[site1][rot1][4],sc[site2][rot2][2],sc[site2][rot2][0],120.,120.)+
         HbondEnergyAtomAndAtom(sc[site1][rot1][3],sc[site1][rot1][5],sc[site2][rot2][2],sc[site2][rot2][0],120.,120.)+
         HbondEnergyAtomAndAtom(sc[site1][rot1][1],sc[site1][rot1][2],sc[site2][rot2][2],sc[site2][rot2][0],120.,120.);
     }
-    else if(seq[site2]=='Q'){
+    else if(seq[site2]=='Q'||seq[site2]=='q'){
       energy = HbondEnergyAtomAndAtom(sc[site1][rot1][3],sc[site1][rot1][4],sc[site2][rot2][3],sc[site2][rot2][1],120.,120.)+
         HbondEnergyAtomAndAtom(sc[site1][rot1][3],sc[site1][rot1][5],sc[site2][rot2][3],sc[site2][rot2][1],120.,120.)+
         HbondEnergyAtomAndAtom(sc[site1][rot1][1],sc[site1][rot1][2],sc[site2][rot2][3],sc[site2][rot2][1],120.,120.);
     }
-    else if(seq[site2]=='S'){
+    else if(seq[site2]=='S'||seq[site2]=='s'){
       energy = HbondEnergyAtomAndAtom(sc[site1][rot1][3],sc[site1][rot1][4],sc[site2][rot2][0],stru[site2].xyz[4],120.,109.5)+
         HbondEnergyAtomAndAtom(sc[site1][rot1][3],sc[site1][rot1][5],sc[site2][rot2][0],stru[site2].xyz[4],120.,109.5)+
         HbondEnergyAtomAndAtom(sc[site1][rot1][1],sc[site1][rot1][2],sc[site2][rot2][0],stru[site2].xyz[4],120.,109.5);
     }
-    else if(seq[site2]=='T'){
+    else if(seq[site2]=='T'||seq[site2]=='t'){
       energy = HbondEnergyAtomAndAtom(sc[site1][rot1][3],sc[site1][rot1][4],sc[site2][rot2][0],stru[site2].xyz[4],120.,109.5)+
         HbondEnergyAtomAndAtom(sc[site1][rot1][3],sc[site1][rot1][5],sc[site2][rot2][0],stru[site2].xyz[4],120.,109.5)+
         HbondEnergyAtomAndAtom(sc[site1][rot1][1],sc[site1][rot1][2],sc[site2][rot2][0],stru[site2].xyz[4],120.,109.5);
     }
-    else if(seq[site2]=='Y'){
+    else if(seq[site2]=='Y'||seq[site2]=='y'){
       energy = HbondEnergyAtomAndAtom(sc[site1][rot1][3],sc[site1][rot1][4],sc[site2][rot2][6],sc[site2][rot2][5],120.,120.)+
         HbondEnergyAtomAndAtom(sc[site1][rot1][3],sc[site1][rot1][5],sc[site2][rot2][6],sc[site2][rot2][5],120.,120.)+
         HbondEnergyAtomAndAtom(sc[site1][rot1][1],sc[site1][rot1][2],sc[site2][rot2][6],sc[site2][rot2][5],120.,120.);
     }
   }
-  else if(seq[site1]=='W'){
-    if(seq[site2]=='D'){
+  else if(seq[site1]=='W'||seq[site1]=='w'){
+    if(seq[site2]=='D'||seq[site2]=='d'){
       energy = HbondEnergyAtomAndAtom(sc[site1][rot1][1],sc[site1][rot1][3],sc[site2][rot2][1],sc[site2][rot2][0],120.,120.)+
         HbondEnergyAtomAndAtom(sc[site1][rot1][1],sc[site1][rot1][3],sc[site2][rot2][2],sc[site2][rot2][0],120.,120.);
     }
-    else if(seq[site2]=='E'){
+    else if(seq[site2]=='E'||seq[site2]=='e'){
       energy = HbondEnergyAtomAndAtom(sc[site1][rot1][1],sc[site1][rot1][3],sc[site2][rot2][2],sc[site2][rot2][1],120.,120.)+
         HbondEnergyAtomAndAtom(sc[site1][rot1][1],sc[site1][rot1][3],sc[site2][rot2][3],sc[site2][rot2][1],120.,120.);
     }
-    else if(seq[site2]=='H'){
+    else if(seq[site2]=='H'||seq[site2]=='h'){
       energy = HbondEnergyAtomAndAtom(sc[site1][rot1][1],sc[site1][rot1][3],sc[site2][rot2][4],sc[site2][rot2][2],120.,120.);
     }
-    else if(seq[site2]=='N'){
+    else if(seq[site2]=='N'||seq[site2]=='n'){
       energy = HbondEnergyAtomAndAtom(sc[site1][rot1][1],sc[site1][rot1][3],sc[site2][rot2][2],sc[site2][rot2][0],120.,120.);
     }
-    else if(seq[site2]=='Q'){
+    else if(seq[site2]=='Q'||seq[site2]=='q'){
       energy = HbondEnergyAtomAndAtom(sc[site1][rot1][1],sc[site1][rot1][3],sc[site2][rot2][3],sc[site2][rot2][1],120.,120.);
     }
-    else if(seq[site2]=='S'){
+    else if(seq[site2]=='S'||seq[site2]=='s'){
       energy = HbondEnergyAtomAndAtom(sc[site1][rot1][1],sc[site1][rot1][3],sc[site2][rot2][0],stru[site2].xyz[4],120.,109.5);
     }
-    else if(seq[site2]=='T'){
+    else if(seq[site2]=='T'||seq[site2]=='t'){
       energy = HbondEnergyAtomAndAtom(sc[site1][rot1][1],sc[site1][rot1][3],sc[site2][rot2][0],stru[site2].xyz[4],120.,109.5);
     }
-    else if(seq[site2]=='Y'){
+    else if(seq[site2]=='Y'||seq[site2]=='y'){
       energy = HbondEnergyAtomAndAtom(sc[site1][rot1][1],sc[site1][rot1][3],sc[site2][rot2][6],sc[site2][rot2][5],120.,120.);
     }
   }
-  else if(seq[site1]=='H'){
-    if(seq[site2]=='D'){
+  else if(seq[site1]=='H'||seq[site1]=='h'){
+    if(seq[site2]=='D'||seq[site2]=='d'){
       energy = HbondEnergyAtomAndAtom(sc[site1][rot1][0],sc[site1][rot1][1],sc[site2][rot2][1],sc[site2][rot2][0],120.,120.)+
         HbondEnergyAtomAndAtom(sc[site1][rot1][0],sc[site1][rot1][1],sc[site2][rot2][2],sc[site2][rot2][0],120.,120.);
     }
-    else if(seq[site2]=='E'){
+    else if(seq[site2]=='E'||seq[site2]=='e'){
       energy = HbondEnergyAtomAndAtom(sc[site1][rot1][0],sc[site1][rot1][1],sc[site2][rot2][2],sc[site2][rot2][1],120.,120.)+
         HbondEnergyAtomAndAtom(sc[site1][rot1][0],sc[site1][rot1][1],sc[site2][rot2][3],sc[site2][rot2][1],120.,120.);
     }
-    else if(seq[site2]=='K'){
+    else if(seq[site2]=='K'||seq[site2]=='k'){
       energy = HbondEnergyAtomAndAtom(sc[site2][rot2][2],sc[site2][rot2][3],sc[site1][rot1][4],sc[site1][rot1][2],109.5,120.);
     }
-    else if(seq[site2]=='R'){
+    else if(seq[site2]=='R'||seq[site2]=='r'){
       energy = HbondEnergyAtomAndAtom(sc[site2][rot2][3],sc[site2][rot2][4],sc[site1][rot1][4],sc[site1][rot1][2],120.,120.)+
         HbondEnergyAtomAndAtom(sc[site2][rot2][3],sc[site2][rot2][5],sc[site1][rot1][4],sc[site1][rot1][2],120.,120.)+
         HbondEnergyAtomAndAtom(sc[site2][rot2][1],sc[site2][rot2][2],sc[site1][rot1][4],sc[site1][rot1][2],120.,120.);
     }
-    else if(seq[site2]=='W'){
+    else if(seq[site2]=='W'||seq[site2]=='w'){
       energy = HbondEnergyAtomAndAtom(sc[site2][rot2][1],sc[site2][rot2][3],sc[site1][rot1][1],sc[site1][rot1][0],120.,120.)+
         HbondEnergyAtomAndAtom(sc[site2][rot2][1],sc[site2][rot2][3],sc[site1][rot1][2],sc[site1][rot1][0],120.,120.);
     }
-    else if(seq[site2]=='H'){
+    else if(seq[site2]=='H'||seq[site2]=='h'){
       energy = HbondEnergyAtomAndAtom(sc[site1][rot1][0],sc[site1][rot1][1],sc[site2][rot2][4],sc[site2][rot2][2],120.,120.)+
         HbondEnergyAtomAndAtom(sc[site2][rot2][0],sc[site2][rot2][1],sc[site1][rot1][4],sc[site1][rot1][2],120.,120.);
     }
-    else if(seq[site2]=='N'){
+    else if(seq[site2]=='N'||seq[site2]=='n'){
       energy = HbondEnergyAtomAndAtom(sc[site1][rot1][0],sc[site1][rot1][1],sc[site2][rot2][1],sc[site2][rot2][0],120.,120.)+
         HbondEnergyAtomAndAtom(sc[site2][rot2][0],sc[site2][rot2][2],sc[site1][rot1][4],sc[site1][rot1][2],120.,120.);
     }
-    else if(seq[site2]=='Q'){
+    else if(seq[site2]=='Q'||seq[site2]=='q'){
       energy = HbondEnergyAtomAndAtom(sc[site1][rot1][0],sc[site1][rot1][1],sc[site2][rot2][2],sc[site2][rot2][1],120.,120.)+
         HbondEnergyAtomAndAtom(sc[site2][rot2][1],sc[site2][rot2][3],sc[site1][rot1][4],sc[site1][rot1][2],120.,120.);
     }
-    else if(seq[site2]=='S'){
+    else if(seq[site2]=='S'||seq[site2]=='s'){
       energy = HbondEnergyAtomAndAtom(sc[site1][rot1][0],sc[site1][rot1][1],sc[site2][rot2][0],stru[site2].xyz[4],120.,109.5)+
         HbondEnergyAtomAndAtom(stru[site2].xyz[4],sc[site2][rot2][0],sc[site1][rot1][4],sc[site1][rot1][2],120.,109.5);
     }
-    else if(seq[site2]=='T'){
+    else if(seq[site2]=='T'||seq[site2]=='t'){
       energy = HbondEnergyAtomAndAtom(sc[site1][rot1][0],sc[site1][rot1][1],sc[site2][rot2][0],stru[site2].xyz[4],120.,109.5)+
         HbondEnergyAtomAndAtom(stru[site2].xyz[4],sc[site2][rot2][0],sc[site1][rot1][4],sc[site1][rot1][2],120.,109.5);
     }
-    else if(seq[site2]=='Y'){
+    else if(seq[site2]=='Y'||seq[site2]=='y'){
       energy = HbondEnergyAtomAndAtom(sc[site1][rot1][0],sc[site1][rot1][1],sc[site2][rot2][6],sc[site2][rot2][5],120.,120.)+
         HbondEnergyAtomAndAtom(sc[site2][rot2][5],sc[site2][rot2][6],sc[site1][rot1][4],sc[site1][rot1][2],120.,120.);
     }
   }
-  else if(seq[site1]=='N'){
-    if(seq[site2]=='D'){
+  else if(seq[site1]=='N'||seq[site1]=='n'){
+    if(seq[site2]=='D'||seq[site2]=='d'){
       energy = HbondEnergyAtomAndAtom(sc[site1][rot1][0],sc[site1][rot1][2],sc[site2][rot2][1],sc[site2][rot2][0],120.,120.)+
         HbondEnergyAtomAndAtom(sc[site1][rot1][0],sc[site1][rot1][2],sc[site2][rot2][2],sc[site2][rot2][0],120.,120.);
     }
-    else if(seq[site2]=='E'){
+    else if(seq[site2]=='E'||seq[site2]=='e'){
       energy = HbondEnergyAtomAndAtom(sc[site1][rot1][0],sc[site1][rot1][2],sc[site2][rot2][2],sc[site2][rot2][1],120.,120.)+
         HbondEnergyAtomAndAtom(sc[site1][rot1][0],sc[site1][rot1][2],sc[site2][rot2][3],sc[site2][rot2][1],120.,120.);
     }
-    else if(seq[site2]=='K'){
+    else if(seq[site2]=='K'||seq[site2]=='k'){
       energy = HbondEnergyAtomAndAtom(sc[site2][rot2][2],sc[site2][rot2][3],sc[site1][rot1][1],sc[site1][rot1][0],109.5,120.);
     }
-    else if(seq[site2]=='R'){
+    else if(seq[site2]=='R'||seq[site2]=='r'){
       energy = HbondEnergyAtomAndAtom(sc[site2][rot2][3],sc[site2][rot2][4],sc[site1][rot1][1],sc[site1][rot1][0],120.,120.)+
         HbondEnergyAtomAndAtom(sc[site2][rot2][3],sc[site2][rot2][5],sc[site1][rot1][1],sc[site1][rot1][0],120.,120.)+
         HbondEnergyAtomAndAtom(sc[site2][rot2][1],sc[site2][rot2][2],sc[site1][rot1][1],sc[site1][rot1][0],120.,120.);
     }
-    else if(seq[site2]=='W'){
+    else if(seq[site2]=='W'||seq[site2]=='w'){
       energy = HbondEnergyAtomAndAtom(sc[site2][rot2][1],sc[site2][rot2][3],sc[site1][rot1][1],sc[site1][rot1][0],120.,120.);
     }
-    else if(seq[site2]=='H'){
+    else if(seq[site2]=='H'||seq[site2]=='h'){
       energy = HbondEnergyAtomAndAtom(sc[site2][rot2][0],sc[site2][rot2][1],sc[site1][rot1][1],sc[site1][rot1][0],120.,120.)+
         HbondEnergyAtomAndAtom(sc[site1][rot1][0],sc[site1][rot1][2],sc[site2][rot2][4],sc[site2][rot2][2],120.,120.);
     }
-    else if(seq[site2]=='N'){
+    else if(seq[site2]=='N'||seq[site2]=='n'){
       energy = HbondEnergyAtomAndAtom(sc[site2][rot2][0],sc[site2][rot2][2],sc[site1][rot1][1],sc[site1][rot1][0],120.,120.)+
         HbondEnergyAtomAndAtom(sc[site1][rot1][0],sc[site1][rot1][2],sc[site2][rot2][1],sc[site2][rot2][0],120.,120.);
     }
-    else if(seq[site2]=='Q'){
+    else if(seq[site2]=='Q'||seq[site2]=='q'){
       energy = HbondEnergyAtomAndAtom(sc[site2][rot2][1],sc[site2][rot2][3],sc[site1][rot1][1],sc[site1][rot1][0],120.,120.)+
         HbondEnergyAtomAndAtom(sc[site1][rot1][0],sc[site1][rot1][2],sc[site2][rot2][2],sc[site2][rot2][1],120.,120.);
     }
-    else if(seq[site2]=='S'){
+    else if(seq[site2]=='S'||seq[site2]=='s'){
       energy = HbondEnergyAtomAndAtom(stru[site2].xyz[4],sc[site2][rot2][0],sc[site1][rot1][1],sc[site1][rot1][0],109.5,120.)+
         HbondEnergyAtomAndAtom(sc[site1][rot1][0],sc[site1][rot1][2],sc[site2][rot2][0],stru[site2].xyz[4],120.,109.5);
     }
-    else if(seq[site2]=='T'){
+    else if(seq[site2]=='T'||seq[site2]=='t'){
       energy = HbondEnergyAtomAndAtom(stru[site2].xyz[4],sc[site2][rot2][0],sc[site1][rot1][1],sc[site1][rot1][0],109.5,120.)+
         HbondEnergyAtomAndAtom(sc[site1][rot1][0],sc[site1][rot1][2],sc[site2][rot2][0],stru[site2].xyz[4],120.,109.5);
     }
-    else if(seq[site2]=='Y'){
+    else if(seq[site2]=='Y'||seq[site2]=='y'){
       energy = HbondEnergyAtomAndAtom(sc[site2][rot2][5],sc[site2][rot2][6],sc[site1][rot1][1],sc[site1][rot1][0],109.5,120.)+
         HbondEnergyAtomAndAtom(sc[site1][rot1][0],sc[site1][rot1][2],sc[site2][rot2][6],sc[site2][rot2][5],120.,120.);
     }
   }
-  else if(seq[site1]=='Q'){
-    if(seq[site2]=='D'){
+  else if(seq[site1]=='Q'||seq[site1]=='q'){
+    if(seq[site2]=='D'||seq[site2]=='d'){
       energy = HbondEnergyAtomAndAtom(sc[site1][rot1][1],sc[site1][rot1][3],sc[site2][rot2][1],sc[site2][rot2][0],120.,120.)+
         HbondEnergyAtomAndAtom(sc[site1][rot1][1],sc[site1][rot1][3],sc[site2][rot2][2],sc[site2][rot2][0],120.,120.);
     }
-    else if(seq[site2]=='E'){
+    else if(seq[site2]=='E'||seq[site2]=='e'){
       energy = HbondEnergyAtomAndAtom(sc[site1][rot1][1],sc[site1][rot1][3],sc[site2][rot2][2],sc[site2][rot2][1],120.,120.)+
         HbondEnergyAtomAndAtom(sc[site1][rot1][1],sc[site1][rot1][3],sc[site2][rot2][3],sc[site2][rot2][1],120.,120.);
     }
-    else if(seq[site2]=='K'){
+    else if(seq[site2]=='K'||seq[site2]=='k'){
       energy = HbondEnergyAtomAndAtom(sc[site2][rot2][2],sc[site2][rot2][3],sc[site1][rot1][2],sc[site1][rot1][1],109.5,120.);
     }
-    else if(seq[site2]=='R'){
+    else if(seq[site2]=='R'||seq[site2]=='r'){
       energy = HbondEnergyAtomAndAtom(sc[site2][rot2][3],sc[site2][rot2][4],sc[site1][rot1][2],sc[site1][rot1][1],120.,120.)+
         HbondEnergyAtomAndAtom(sc[site2][rot2][3],sc[site2][rot2][5],sc[site1][rot1][2],sc[site1][rot1][1],120.,120.)+
         HbondEnergyAtomAndAtom(sc[site2][rot2][1],sc[site2][rot2][2],sc[site1][rot1][2],sc[site1][rot1][1],120.,120.);
     }
-    else if(seq[site2]=='W'){
+    else if(seq[site2]=='W'||seq[site2]=='w'){
       energy = HbondEnergyAtomAndAtom(sc[site2][rot2][1],sc[site2][rot2][3],sc[site1][rot1][2],sc[site1][rot1][1],120.,120.);
     }
-    else if(seq[site2]=='H'){
+    else if(seq[site2]=='H'||seq[site2]=='h'){
       energy = HbondEnergyAtomAndAtom(sc[site2][rot2][0],sc[site2][rot2][1],sc[site1][rot1][2],sc[site1][rot1][1],120.,120.)+
         HbondEnergyAtomAndAtom(sc[site1][rot1][1],sc[site1][rot1][3],sc[site2][rot2][4],sc[site2][rot2][2],120.,120.);
     }
-    else if(seq[site2]=='N'){
+    else if(seq[site2]=='N'||seq[site2]=='n'){
       energy = HbondEnergyAtomAndAtom(sc[site2][rot2][0],sc[site2][rot2][2],sc[site1][rot1][2],sc[site1][rot1][1],120.,120.)+
         HbondEnergyAtomAndAtom(sc[site1][rot1][1],sc[site1][rot1][3],sc[site2][rot2][1],sc[site2][rot2][0],120.,120.);
     }
-    else if(seq[site2]=='Q'){
+    else if(seq[site2]=='Q'||seq[site2]=='q'){
       energy = HbondEnergyAtomAndAtom(sc[site2][rot2][1],sc[site2][rot2][3],sc[site1][rot1][2],sc[site1][rot1][1],120.,120.)+
         HbondEnergyAtomAndAtom(sc[site1][rot1][1],sc[site1][rot1][3],sc[site2][rot2][2],sc[site2][rot2][1],120.,120.);
     }
-    else if(seq[site2]=='S'){
+    else if(seq[site2]=='S'||seq[site2]=='s'){
       energy = HbondEnergyAtomAndAtom(stru[site2].xyz[4],sc[site2][rot2][0],sc[site1][rot1][2],sc[site1][rot1][1],109.5,120.)+
         HbondEnergyAtomAndAtom(sc[site1][rot1][1],sc[site1][rot1][3],sc[site2][rot2][0],stru[site2].xyz[4],120.,109.5);
     }
-    else if(seq[site2]=='T'){
+    else if(seq[site2]=='T'||seq[site2]=='t'){
       energy = HbondEnergyAtomAndAtom(stru[site2].xyz[4],sc[site2][rot2][0],sc[site1][rot1][2],sc[site1][rot1][1],109.5,120.)+
         HbondEnergyAtomAndAtom(sc[site1][rot1][1],sc[site1][rot1][3],sc[site2][rot2][0],stru[site2].xyz[4],120.,109.5);
     }
-    else if(seq[site2]=='Y'){
+    else if(seq[site2]=='Y'||seq[site2]=='y'){
       energy = HbondEnergyAtomAndAtom(sc[site2][rot2][5],sc[site2][rot2][6],sc[site1][rot1][2],sc[site1][rot1][1],109.5,120.)+
         HbondEnergyAtomAndAtom(sc[site1][rot1][1],sc[site1][rot1][3],sc[site2][rot2][6],sc[site2][rot2][5],120.,120.);
     }
   }
-  else if(seq[site1]=='S'){
-    if(seq[site2]=='D'){
+  else if(seq[site1]=='S'||seq[site1]=='s'){
+    if(seq[site2]=='D'||seq[site2]=='d'){
       energy = HbondEnergyAtomAndAtom(stru[site1].xyz[4],sc[site1][rot1][0],sc[site2][rot2][1],sc[site2][rot2][0],120.,120.)+
         HbondEnergyAtomAndAtom(stru[site1].xyz[4],sc[site1][rot1][0],sc[site2][rot2][2],sc[site2][rot2][0],120.,120.);
     }
-    else if(seq[site2]=='E'){
+    else if(seq[site2]=='E'||seq[site2]=='e'){
       energy = HbondEnergyAtomAndAtom(stru[site1].xyz[4],sc[site1][rot1][0],sc[site2][rot2][2],sc[site2][rot2][1],120.,120.)+
         HbondEnergyAtomAndAtom(stru[site1].xyz[4],sc[site1][rot1][0],sc[site2][rot2][3],sc[site2][rot2][1],120.,120.);
     }
-    else if(seq[site2]=='K'){
+    else if(seq[site2]=='K'||seq[site2]=='k'){
       energy = HbondEnergyAtomAndAtom(sc[site2][rot2][2],sc[site2][rot2][3],sc[site1][rot1][0],stru[site1].xyz[4],109.5,109.5);
     }
-    else if(seq[site2]=='R'){
+    else if(seq[site2]=='R'||seq[site2]=='r'){
       energy = HbondEnergyAtomAndAtom(sc[site2][rot2][3],sc[site2][rot2][4],sc[site1][rot1][0],stru[site1].xyz[4],120.,109.5)+
         HbondEnergyAtomAndAtom(sc[site2][rot2][3],sc[site2][rot2][5],sc[site1][rot1][0],stru[site1].xyz[4],120.,109.5)+
         HbondEnergyAtomAndAtom(sc[site2][rot2][1],sc[site2][rot2][2],sc[site1][rot1][0],stru[site1].xyz[4],120.,109.5);
     }
-    else if(seq[site2]=='W'){
+    else if(seq[site2]=='W'||seq[site2]=='w'){
       energy = HbondEnergyAtomAndAtom(sc[site2][rot2][1],sc[site2][rot2][3],sc[site1][rot1][0],stru[site1].xyz[4],120.,109.5);
     }
-    else if(seq[site2]=='H'){
+    else if(seq[site2]=='H'||seq[site2]=='h'){
       energy = HbondEnergyAtomAndAtom(sc[site2][rot2][0],sc[site2][rot2][1],sc[site1][rot1][0],stru[site1].xyz[4],120.,109.5)+
         HbondEnergyAtomAndAtom(stru[site1].xyz[4],sc[site1][rot1][0],sc[site2][rot2][4],sc[site2][rot2][2],109.5,120.);
     }
-    else if(seq[site2]=='N'){
+    else if(seq[site2]=='N'||seq[site2]=='n'){
       energy = HbondEnergyAtomAndAtom(sc[site2][rot2][0],sc[site2][rot2][2],sc[site1][rot1][0],stru[site1].xyz[4],120.,109.5)+
         HbondEnergyAtomAndAtom(stru[site1].xyz[4],sc[site1][rot1][0],sc[site2][rot2][1],sc[site2][rot2][0],109.5,120.);
     }
-    else if(seq[site2]=='Q'){
+    else if(seq[site2]=='Q'||seq[site2]=='q'){
       energy = HbondEnergyAtomAndAtom(sc[site2][rot2][1],sc[site2][rot2][3],sc[site1][rot1][0],stru[site1].xyz[4],120.,109.5)+
         HbondEnergyAtomAndAtom(stru[site1].xyz[4],sc[site1][rot1][0],sc[site2][rot2][2],sc[site2][rot2][1],109.5,120.);
     }
-    else if(seq[site2]=='S'){
+    else if(seq[site2]=='S'||seq[site2]=='s'){
       energy = HbondEnergyAtomAndAtom(stru[site2].xyz[4],sc[site2][rot2][0],sc[site1][rot1][0],stru[site1].xyz[4],109.5,109.5);
     }
-    else if(seq[site2]=='T'){
+    else if(seq[site2]=='T'||seq[site2]=='t'){
       energy = HbondEnergyAtomAndAtom(stru[site2].xyz[4],sc[site2][rot2][0],sc[site1][rot1][0],stru[site1].xyz[4],109.5,109.5);
     }
-    else if(seq[site2]=='Y'){
+    else if(seq[site2]=='Y'||seq[site2]=='y'){
       energy = HbondEnergyAtomAndAtom(sc[site2][rot2][5],sc[site2][rot2][6],sc[site1][rot1][0],stru[site1].xyz[4],120.0,109.5);
     }
   }
-  else if(seq[site1]=='T'){
-    if(seq[site2]=='D'){
+  else if(seq[site1]=='T'||seq[site1]=='t'){
+    if(seq[site2]=='D'||seq[site2]=='t'){
       energy = HbondEnergyAtomAndAtom(stru[site1].xyz[4],sc[site1][rot1][0],sc[site2][rot2][1],sc[site2][rot2][0],120.,120.)+
         HbondEnergyAtomAndAtom(stru[site1].xyz[4],sc[site1][rot1][0],sc[site2][rot2][2],sc[site2][rot2][0],120.,120.);
     }
-    else if(seq[site2]=='E'){
+    else if(seq[site2]=='E'||seq[site2]=='e'){
       energy = HbondEnergyAtomAndAtom(stru[site1].xyz[4],sc[site1][rot1][0],sc[site2][rot2][2],sc[site2][rot2][1],120.,120.)+
         HbondEnergyAtomAndAtom(stru[site1].xyz[4],sc[site1][rot1][0],sc[site2][rot2][3],sc[site2][rot2][1],120.,120.);
     }
-    else if(seq[site2]=='K'){
+    else if(seq[site2]=='K'||seq[site2]=='k'){
       energy = HbondEnergyAtomAndAtom(sc[site2][rot2][2],sc[site2][rot2][3],sc[site1][rot1][0],stru[site1].xyz[4],109.5,109.5);
     }
-    else if(seq[site2]=='R'){
+    else if(seq[site2]=='R'||seq[site2]=='r'){
       energy = HbondEnergyAtomAndAtom(sc[site2][rot2][3],sc[site2][rot2][4],sc[site1][rot1][0],stru[site1].xyz[4],120.,109.5)+
         HbondEnergyAtomAndAtom(sc[site2][rot2][3],sc[site2][rot2][5],sc[site1][rot1][0],stru[site1].xyz[4],120.,109.5)+
         HbondEnergyAtomAndAtom(sc[site2][rot2][1],sc[site2][rot2][2],sc[site1][rot1][0],stru[site1].xyz[4],120.,109.5);
     }
-    else if(seq[site2]=='W'){
+    else if(seq[site2]=='W'||seq[site2]=='w'){
       energy = HbondEnergyAtomAndAtom(sc[site2][rot2][1],sc[site2][rot2][3],sc[site1][rot1][0],stru[site1].xyz[4],120.,109.5);
     }
-    else if(seq[site2]=='H'){
+    else if(seq[site2]=='H'||seq[site2]=='h'){
       energy = HbondEnergyAtomAndAtom(sc[site2][rot2][0],sc[site2][rot2][1],sc[site1][rot1][0],stru[site1].xyz[4],120.,109.5)+
         HbondEnergyAtomAndAtom(stru[site1].xyz[4],sc[site1][rot1][0],sc[site2][rot2][4],sc[site2][rot2][2],109.5,120.);
     }
-    else if(seq[site2]=='N'){
+    else if(seq[site2]=='N'||seq[site2]=='n'){
       energy = HbondEnergyAtomAndAtom(sc[site2][rot2][0],sc[site2][rot2][2],sc[site1][rot1][0],stru[site1].xyz[4],120.,109.5)+
         HbondEnergyAtomAndAtom(stru[site1].xyz[4],sc[site1][rot1][0],sc[site2][rot2][1],sc[site2][rot2][0],109.5,120.);
     }
-    else if(seq[site2]=='Q'){
+    else if(seq[site2]=='Q'||seq[site2]=='q'){
       energy = HbondEnergyAtomAndAtom(sc[site2][rot2][1],sc[site2][rot2][3],sc[site1][rot1][0],stru[site1].xyz[4],120.,109.5)+
         HbondEnergyAtomAndAtom(stru[site1].xyz[4],sc[site1][rot1][0],sc[site2][rot2][2],sc[site2][rot2][1],109.5,120.);
     }
-    else if(seq[site2]=='S'){
+    else if(seq[site2]=='S'||seq[site2]=='s'){
       energy = HbondEnergyAtomAndAtom(stru[site2].xyz[4],sc[site2][rot2][0],sc[site1][rot1][0],stru[site1].xyz[4],109.5,109.5);
     }
-    else if(seq[site2]=='T'){
+    else if(seq[site2]=='T'||seq[site2]=='t'){
       energy = HbondEnergyAtomAndAtom(stru[site2].xyz[4],sc[site2][rot2][0],sc[site1][rot1][0],stru[site1].xyz[4],109.5,109.5);
     }
-    else if(seq[site2]=='Y'){
+    else if(seq[site2]=='Y'||seq[site2]=='y'){
       energy = HbondEnergyAtomAndAtom(sc[site2][rot2][5],sc[site2][rot2][6],sc[site1][rot1][0],stru[site1].xyz[4],120.0,109.5);
     }
   }
-  else if(seq[site1]=='Y'){
-    if(seq[site2]=='D'){
+  else if(seq[site1]=='Y'||seq[site1]=='y'){
+    if(seq[site2]=='D'||seq[site2]=='d'){
       energy = HbondEnergyAtomAndAtom(sc[site1][rot1][5],sc[site1][rot1][6],sc[site2][rot2][1],sc[site2][rot2][0],120.,120.)+
         HbondEnergyAtomAndAtom(sc[site1][rot1][5],sc[site1][rot1][6],sc[site2][rot2][2],sc[site2][rot2][0],120.,120.);
     }
-    else if(seq[site2]=='E'){
+    else if(seq[site2]=='E'||seq[site2]=='e'){
       energy = HbondEnergyAtomAndAtom(sc[site1][rot1][5],sc[site1][rot1][6],sc[site2][rot2][2],sc[site2][rot2][1],120.,120.)+
         HbondEnergyAtomAndAtom(sc[site1][rot1][5],sc[site1][rot1][6],sc[site2][rot2][3],sc[site2][rot2][1],120.,120.);
     }
-    else if(seq[site2]=='K'){
+    else if(seq[site2]=='K'||seq[site2]=='k'){
       energy = HbondEnergyAtomAndAtom(sc[site2][rot2][2],sc[site2][rot2][3],sc[site1][rot1][6],sc[site1][rot1][5],109.5,120.);
     }
-    else if(seq[site2]=='R'){
+    else if(seq[site2]=='R'||seq[site2]=='r'){
       energy = HbondEnergyAtomAndAtom(sc[site2][rot2][3],sc[site2][rot2][4],sc[site1][rot1][6],sc[site1][rot1][5],120.,120.)+
         HbondEnergyAtomAndAtom(sc[site2][rot2][3],sc[site2][rot2][5],sc[site1][rot1][6],sc[site1][rot1][5],120.,120.)+
         HbondEnergyAtomAndAtom(sc[site2][rot2][1],sc[site2][rot2][2],sc[site1][rot1][6],sc[site1][rot1][5],120.,120.);
     }
-    else if(seq[site2]=='W'){
+    else if(seq[site2]=='W'||seq[site2]=='w'){
       energy = HbondEnergyAtomAndAtom(sc[site2][rot2][1],sc[site2][rot2][3],sc[site1][rot1][6],sc[site1][rot1][5],120.,120.);
     }
-    else if(seq[site2]=='H'){
+    else if(seq[site2]=='H'||seq[site2]=='h'){
       energy = HbondEnergyAtomAndAtom(sc[site2][rot2][0],sc[site2][rot2][1],sc[site1][rot1][6],sc[site1][rot1][5],120.,120.)+
         HbondEnergyAtomAndAtom(sc[site1][rot1][5],sc[site1][rot1][6],sc[site2][rot2][4],sc[site2][rot2][2],120.,120.);
     }
-    else if(seq[site2]=='N'){
+    else if(seq[site2]=='N'||seq[site2]=='n'){
       energy = HbondEnergyAtomAndAtom(sc[site2][rot2][0],sc[site2][rot2][2],sc[site1][rot1][6],sc[site1][rot1][5],120.,120.)+
         HbondEnergyAtomAndAtom(sc[site1][rot1][5],sc[site1][rot1][6],sc[site2][rot2][1],sc[site2][rot2][0],120.,120.);
     }
-    else if(seq[site2]=='Q'){
+    else if(seq[site2]=='Q'||seq[site2]=='q'){
       energy = HbondEnergyAtomAndAtom(sc[site2][rot2][1],sc[site2][rot2][3],sc[site1][rot1][6],sc[site1][rot1][5],120.,120.)+
         HbondEnergyAtomAndAtom(sc[site1][rot1][5],sc[site1][rot1][6],sc[site2][rot2][2],sc[site2][rot2][1],120.,120.);
     }
-    else if(seq[site2]=='S'){
+    else if(seq[site2]=='S'||seq[site2]=='s'){
       energy = HbondEnergyAtomAndAtom(stru[site2].xyz[4],sc[site2][rot2][0],sc[site1][rot1][6],sc[site1][rot1][5],109.5,120.);
     }
-    else if(seq[site2]=='T'){
+    else if(seq[site2]=='T'||seq[site2]=='t'){
       energy = HbondEnergyAtomAndAtom(stru[site2].xyz[4],sc[site2][rot2][0],sc[site1][rot1][6],sc[site1][rot1][5],109.5,120.);
     }
-    else if(seq[site2]=='Y'){
+    else if(seq[site2]=='Y'||seq[site2]=='y'){
       energy = HbondEnergyAtomAndAtom(sc[site2][rot2][5],sc[site2][rot2][6],sc[site1][rot1][6],sc[site1][rot1][5],120.,120.);
     }
   }

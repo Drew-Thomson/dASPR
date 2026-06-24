@@ -44,7 +44,7 @@ void Structure::ReadPDB(string &pdbfile)
           rtmp.xyz.clear();
         }
         rtmp.name=buf.substr(17,3);
-        if(rtmp.name=="ALA" || rtmp.name=="GLY"){
+        if(rtmp.name=="ALA" || rtmp.name=="GLY" || rtmp.name=="DAL"){
           nAlaGly++;
         }
         rtmp.chID=buf[21];
@@ -52,7 +52,7 @@ void Structure::ReadPDB(string &pdbfile)
         rtmp.ins=buf[26];
         stmp2=stmp1;
       }  
-      if(buf[16]>'A')continue;
+      if(buf[16]>'A')continue;  //reinstated
       rtmp.atNames.push_back(buf.substr(12,4));
       rtmp.atTypes.push_back(buf[13]);
       FV1 xyz;
