@@ -59,15 +59,15 @@ int main(int argc,char** argv)
     }
   }
   PROGRAM_PATH=(string)fullpath;
-  string rotfile=PROGRAM_PATH+"/"+ROTLIB2010;
-  fstream infile(rotfile.c_str(),ios::in|ios::binary);
-  if(!infile){
-    cerr<<"error! cannot find rotamer library "<<ROTLIB2010<<endl;
-    exit(0);
-  }
-  else{
-    infile.close();
-  }
+  // string rotfile=PROGRAM_PATH+"/"+ROTLIB2010;
+  // fstream infile(rotfile.c_str(),ios::in|ios::binary);
+  // if(!infile){
+  //   cerr<<"error! cannot find rotamer library "<<ROTLIB2010<<endl;
+  //   exit(0);
+  // }
+  // else{
+  //   infile.close();
+  // }
 
   string pdbin=(string)"example/1mol.pdb";
   string pdbout=(string)"example/1mol_FASPR.pdb";
