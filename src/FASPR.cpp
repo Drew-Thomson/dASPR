@@ -20,7 +20,7 @@ IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 using namespace std;
 string PROGRAM_PATH=(string)".";
-string ROTLIB2010=(string)"dun2010bbdep.bin";
+string ROTLIB2010=(string)"dun2010_mirror.bin";
 
 int main(int argc,char** argv)
 {
@@ -44,54 +44,37 @@ int main(int argc,char** argv)
   if(argc<2){
     cout<<"Usage: ./FASPR -i input.pdb -o output.pdb\n";
     cout<<"[-s sequence.txt] to load a sequence file\n";
+    cout<<"[-r rotlib.bin] to specify rotamer library path\n";
     return 0;
   }
-
-  /**********************************************************/
-  /* get program path and check if rotamer library exists   */
-  /**********************************************************/
-  char fullpath[2048];
-  strcpy(fullpath,argv[0]);
-  for(int i = strlen(fullpath); i >= 0; --i){
-    if(fullpath[i]=='/' || fullpath[i]=='\\'){
-      fullpath[i + 1]='\0';
-      break;
-    }
-  }
-  PROGRAM_PATH=(string)fullpath;
-  // string rotfile=PROGRAM_PATH+"/"+ROTLIB2010;
-  // fstream infile(rotfile.c_str(),ios::in|ios::binary);
-  // if(!infile){
-  //   cerr<<"error! cannot find rotamer library "<<ROTLIB2010<<endl;
-  //   exit(0);
-  // }
-  // else{
-  //   infile.close();
-  // }
 
   string pdbin=(string)"example/1mol.pdb";
   string pdbout=(string)"example/1mol_FASPR.pdb";
   string seqfile=(string)"void";
+  string rotlib_cli="";
 
   bool sflag=false;
   int i;
-  for(i=1;i<argc-1;i++){
+  for(i=1;i<argc;i++){
    if(argv[i][0]=='-'){
-     if(argv[i][1]=='i'){
-       i++;
-       pdbin=argv[i];
+     if(strcmp(argv[i],"-i")==0 && i+1<argc){
+       pdbin=argv[++i];
      }
-     else if(argv[i][1]=='o'){
-       i++;
-       pdbout=argv[i];
+     else if(strcmp(argv[i],"-o")==0 && i+1<argc){
+       pdbout=argv[++i];
      }
-     else if(argv[i][1]=='s'){
-       i++;
-       seqfile=argv[i];
+     else if(strcmp(argv[i],"-s")==0 && i+1<argc){
+       seqfile=argv[++i];
        sflag=true;
+     }
+     else if((strcmp(argv[i],"-r")==0 || strcmp(argv[i],"--rotlib")==0) && i+1<argc){
+       rotlib_cli=argv[++i];
      }
    }
   }
+
+  PROGRAM_PATH=GetExecutableDir(argv[0]);
+  ROTLIB2010=FindRotamerLibrary(rotlib_cli, argv[0]);
   
   Solution faspr;
   faspr.ReadPDB(pdbin);

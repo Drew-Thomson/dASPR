@@ -185,8 +185,7 @@ void RotamerBuilder::LoadBBdepRotlib2010()
   FV2 ctmp;
   fstream infile;
   short sht;
-  // string rotfile=PROGRAM_PATH+"/"+ROTLIB2010;  //absoulute path prevents running from other directories
-  string rotfile="/usr/local/bin/dun2010bbdep.bin"; //pointing to symlink works for now
+  string rotfile=ROTLIB2010;
 
   infile.open(rotfile.c_str(),ios::in|ios::binary);
   if(!infile){

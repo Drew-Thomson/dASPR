@@ -16,6 +16,14 @@ LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRA
 IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 ********************************************************************************************************************************/
 #include "Utility.h"
+#include <fstream>
+#include <unistd.h>
+#include <limits.h>
+#include <stdlib.h>
+#include <cstring>
+#if defined(__APPLE__)
+#include <mach-o/dyld.h>
+#endif
 
 
 float Distance(FV1 &p1,FV1 &p2){
@@ -164,6 +172,108 @@ void VectorMinus(FV1 &cc)
   cc[0]=-cc[0];
   cc[1]=-cc[1];
   cc[2]=-cc[2];
+}
+
+string GetExecutableDir(const string& argv0)
+{
+  char buf[PATH_MAX];
+  ssize_t len = -1;
+
+#if defined(__linux__)
+  len = readlink("/proc/self/exe", buf, sizeof(buf) - 1);
+#elif defined(__APPLE__)
+  uint32_t size = sizeof(buf);
+  if (_NSGetExecutablePath(buf, &size) == 0) {
+    len = strlen(buf);
+  }
+#endif
+
+  if (len > 0) {
+    buf[len] = '\0';
+    char realBuf[PATH_MAX];
+    if (realpath(buf, realBuf) != NULL) {
+      string fullPath(realBuf);
+      size_t lastSlash = fullPath.find_last_of("/\\");
+      if (lastSlash != string::npos) {
+        return fullPath.substr(0, lastSlash);
+      }
+    }
+  }
+
+  if (!argv0.empty()) {
+    char realBuf[PATH_MAX];
+    if (realpath(argv0.c_str(), realBuf) != NULL) {
+      string fullPath(realBuf);
+      size_t lastSlash = fullPath.find_last_of("/\\");
+      if (lastSlash != string::npos) {
+        return fullPath.substr(0, lastSlash);
+      }
+    }
+  }
+
+  return "";
+}
+
+string FindRotamerLibrary(const string& cliPath, const string& argv0)
+{
+  // 1. Explicit CLI argument
+  if (!cliPath.empty()) {
+    ifstream infile(cliPath.c_str(), ios::in | ios::binary);
+    if (infile.good()) {
+      infile.close();
+      return cliPath;
+    }
+    cerr << "Error: Specified rotamer library file '" << cliPath << "' cannot be opened or does not exist." << endl;
+    exit(1);
+  }
+
+  // 2. Environment variables (DASPR_ROTLIB or FASPR_ROTLIB)
+  const char* envPath = getenv("DASPR_ROTLIB");
+  if (!envPath) envPath = getenv("FASPR_ROTLIB");
+  if (envPath && strlen(envPath) > 0) {
+    ifstream infile(envPath, ios::in | ios::binary);
+    if (infile.good()) {
+      infile.close();
+      return string(envPath);
+    }
+    cerr << "Error: Rotamer library specified in environment variable ('" << envPath << "') cannot be opened or does not exist." << endl;
+    exit(1);
+  }
+
+  // Automatic search hierarchy for non-explicit invocations
+  vector<string> candidates;
+
+  // 3. Binary's executable directory
+  string exeDir = GetExecutableDir(argv0);
+  if (!exeDir.empty()) {
+    candidates.push_back(exeDir + "/dun2010_mirror.bin");
+  }
+
+  // 4. Current working directory
+  candidates.push_back("./dun2010_mirror.bin");
+
+  // 5. Standard system paths
+  candidates.push_back("/usr/local/share/daspr/dun2010_mirror.bin");
+  candidates.push_back("/usr/local/bin/dun2010_mirror.bin");
+  candidates.push_back("/usr/share/daspr/dun2010_mirror.bin");
+  candidates.push_back("/opt/daspr/dun2010_mirror.bin");
+
+  // Check each candidate path for existence and readability
+  for (size_t i = 0; i < candidates.size(); ++i) {
+    ifstream infile(candidates[i].c_str(), ios::in | ios::binary);
+    if (infile.good()) {
+      infile.close();
+      return candidates[i];
+    }
+  }
+
+  cerr << "Error: Cannot locate rotamer library 'dun2010_mirror.bin'." << endl;
+  cerr << "Checked locations:" << endl;
+  for (size_t i = 0; i < candidates.size(); ++i) {
+    cerr << "  - " << candidates[i] << endl;
+  }
+  cerr << "Please specify the path using '-r <path>' or set the 'DASPR_ROTLIB' environment variable." << endl;
+  exit(1);
 }
 
 

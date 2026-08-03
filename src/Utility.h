@@ -67,4 +67,7 @@ float Sign(float c);
 void MatrixByVector(FV2 &mtr,FV1 &vec,FV1 &cc);
 bool VectorL2Norm(FV1 &data);
 
+string GetExecutableDir(const string& argv0);
+string FindRotamerLibrary(const string& cliPath, const string& argv0);
+
 #endif
