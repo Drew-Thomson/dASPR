@@ -52,7 +52,9 @@ void Structure::ReadPDB(string &pdbfile)
         rtmp.ins=buf[26];
         stmp2=stmp1;
       }  
-      if(buf[16]>'A')continue;  //reinstated
+      // Only accept records with empty altLoc or primary altLoc 'A'.
+      // Previously used a fragile ASCII comparison (buf[16]>'A') which can behave unexpectedly.
+      if(buf[16] != ' ' && buf[16] != 'A') continue;
       rtmp.atNames.push_back(buf.substr(12,4));
       rtmp.atTypes.push_back(buf[13]);
       FV1 xyz;
