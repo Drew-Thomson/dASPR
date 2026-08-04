@@ -18,6 +18,7 @@ IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #pragma warning(disable:4305)
 #include "RotamerBuilder.h"
 #include <stdio.h>
+#include <cctype>
 
 extern string PROGRAM_PATH;
 extern string ROTLIB2010;
@@ -92,9 +93,10 @@ void RotamerBuilder::LoadSeq(string &seqfile)
   int i;
   char aa;
   for(i=0;i<tmp.size();i++){
-    aa=tmp[i];
-    if((aa>='a'&&aa<'z')||(aa>='A'&&aa<'Z'))
-    seq.push_back(aa);
+    aa = tmp[i];
+    if(isalpha((unsigned char)aa)){
+      seq.push_back(aa);
+    }
   }
   if(seq.size()!=nres){
     cout<<"error! the sequence length from file is different from the sequence length from structure"<<endl;
