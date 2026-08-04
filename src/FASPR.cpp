@@ -43,7 +43,7 @@ int main(int argc,char** argv)
 
   if(argc<2){
     cout<<"Usage: ./FASPR -i input.pdb -o output.pdb\n";
-    cout<<"[-s sequence.txt] to load a sequence file\n";
+    cout<<"[-s sequence.txt] to load a sequence file (alias: -f, --fasta)\n";
     cout<<"[-r rotlib.bin] to specify rotamer library path\n";
     return 0;
   }
@@ -63,7 +63,7 @@ int main(int argc,char** argv)
      else if(strcmp(argv[i],"-o")==0 && i+1<argc){
        pdbout=argv[++i];
      }
-     else if(strcmp(argv[i],"-s")==0 && i+1<argc){
+     else if((strcmp(argv[i],"-s")==0 || strcmp(argv[i],"-f")==0 || strcmp(argv[i],"--fasta")==0) && i+1<argc){
        seqfile=argv[++i];
        sflag=true;
      }
