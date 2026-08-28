@@ -1,3 +1,24 @@
+# UPDATE
+
+dASPR is a modified version of FASPR (original readme below) that allows packing of mixed l- and d-amino acid residues in protein structures. This was achieved by mirroring the original Dunbrack rotamer library, simply by copying each entry and inverting the sign of the dihedral angles.
+
+The installation and usage of the algorithm are basically the same (but use the name dASPR instead of FASPR). Hence installation uses:
+
+"<b>g++ -O3 --fast-math -o dASPR src/*.cpp</b>" 
+
+It is also important that the dun2010_mirror.bin rotamer library be used. Other rotamer libraries won't work.
+
+<b> $path/dASPR -i input.pdb -o output.pdb [-s sequence.txt] </b>
+
+The other main difference is that lowercase letters in an input string represent d-amino acid residues. The ability to fix side chain conformations in the input model has been lost. D-amino acids are output with an ATOM header in the pdb file, not HETATM.
+
+dASPR has only been tested on a linux system. The basic functionality for heterochiral peptides works for the cases examined so far, however the accuracy of mirroring the Dunbrack rotamer library remains to be evaluated.
+
+Feedback on performance is welcomed at drew.thomson@glasgow.ac.uk
+
+A communication is being prepared, but in the meantime if you use this please reference this repo, and of course cite the original FASPR paper!
+
+
 # INTRODUCTION
 
 FASPR is a fast and accurate program for protein side-chain packing, which is an important step in conventional, energy-based protein structure prediction and protein design.
