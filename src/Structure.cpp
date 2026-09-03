@@ -90,7 +90,7 @@ void Structure::OutputPDB(PV1 &pdb)
 {
   cout<<setiosflags(ios::fixed)<<setprecision(3);
   int i,j,k;
-  cout<<"REMARK repacked structure by FASPR"<<endl;
+  cout<<"REMARK repacked structure by dASPR"<<endl;
   for(i=0;i<nres;i++){
     int atomindex=1; // index atom from 1 for each residue
     for(j=0;j<pdb[i].atNames.size();j++){
@@ -121,7 +121,7 @@ void Structure::OutputPDB(PV1 &pdb,string &pdbfile)
   }
   ofile<<setiosflags(ios::fixed)<<setprecision(3);
   int i,j,k;
-  ofile<<"REMARK repacked structure by FASPR"<<endl;
+  ofile<<"REMARK repacked structure by dASPR"<<endl;
   for(i=0;i<nres;i++){
     int atomindex=1; // index atom from 1 for each residue
     for(j=0;j<pdb[i].atNames.size();j++){

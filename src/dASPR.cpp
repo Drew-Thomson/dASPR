@@ -25,7 +25,7 @@ string ROTLIB2010=(string)"dun2010_mirror.bin";
 int main(int argc,char** argv)
 {
   cout<<"###########################################################################"<<endl;
-  cout<<"                    FASPR (Version 20200309)                 "<<endl;
+  cout<<"                    dASPR (Fork of FASPR)                 "<<endl;
   cout<<"  A method for fast and accurate protein side-chain packing, "<<endl;
   cout<<"which is an important problem in protein structure prediction"<<endl;
   cout<<"and protein design."<<endl;
@@ -42,14 +42,14 @@ int main(int argc,char** argv)
   start = clock();
 
   if(argc<2){
-    cout<<"Usage: ./FASPR -i input.pdb -o output.pdb\n";
+    cout<<"Usage: ./dASPR -i input.pdb -o output.pdb\n";
     cout<<"[-s sequence.txt] to load a sequence file (alias: -f, --fasta)\n";
     cout<<"[-r rotlib.bin] to specify rotamer library path\n";
     return 0;
   }
 
   string pdbin=(string)"example/1mol.pdb";
-  string pdbout=(string)"example/1mol_FASPR.pdb";
+  string pdbout=(string)"example/1mol_dASPR.pdb";
   string seqfile=(string)"void";
   string rotlib_cli="";
 
