@@ -1,5 +1,10 @@
 # dASPR
 
+[![Build Status](https://github.com/Drew-Thomson/dASPR/actions/workflows/build.yml/badge.svg)](https://github.com/Drew-Thomson/dASPR/actions/workflows/build.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Language](https://img.shields.io/badge/language-C++-blue.svg)](https://isocpp.org/)
+[![GitHub stars](https://img.shields.io/github/stars/Drew-Thomson/dASPR.svg?style=social&label=Star)](https://github.com/Drew-Thomson/dASPR/stargazers)
+
 **dASPR** is a fast and accurate program for protein side-chain packing that supports both L- and D-amino acids. It is a modified version/fork of the original **FASPR** algorithm.
 
 By mirroring the original Dunbrack rotamer library (copying each entry and inverting the sign of the dihedral angles) and incorporating D-amino acid logic, dASPR enables the modeling of heterochiral peptides and mixed-chirality protein structures.
